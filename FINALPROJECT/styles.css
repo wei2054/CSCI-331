@@ -1,0 +1,299 @@
+/* Global Styles */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #f4f4f4; /* Neutral background color */
+}
+
+/* Header */
+header {
+    background-color: #35424a;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+/* Navigation Bar */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #35424a;
+    color: white;
+    font-size: 1.1em;
+    padding: 10px 50px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+}
+
+nav .business-name {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #f4a261;
+    color: #333;
+}
+
+/* Background Image */
+.background-image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 100px 30px 30px; /* Top padding ensures content stays below the nav bar */
+
+}
+
+/* Layout */
+.layout {
+    display: flex;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Image Section */
+.image-section {
+    width: 40%;
+}
+
+.house-image {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Real-Time Cost Section */
+.real-time-cost {
+    margin-top: 20px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.real-time-cost h3 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+/* Form Section */
+.form-section {
+    width: 55%;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #35424a;
+}
+
+form input,
+form select,
+form button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: #f9f9f9;
+    color: #333;
+}
+
+form input::placeholder {
+    color: #bbb;
+}
+
+form button {
+    background: #35424a;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background: #f4a261;
+}
+
+fieldset {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+/* Footer */
+footer {
+    background-color: #000; /* Black background */
+    color: #fff; /* White text */
+    text-align: center;
+    padding: 10px 0;
+    margin-top: auto; /* Pushes the footer to the bottom if content is short */
+    font-size: 0.9rem; /* Slightly smaller text for footer */
+    font-family: Arial, sans-serif; /* Consistent font style */
+}
+
+.saved-houses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.house-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #35424a;
+}
+.sign-out-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1em;
+    padding: 10px;
+}
+
+.sign-out-btn:hover {
+    text-decoration: underline;
+}
+
+/* Add this to your styles.css file */
+nav ul li .sign-out-btn {
+    background: none; /* Remove default button background */
+    border: none; /* Remove border */
+    color: inherit; /* Match text color of links */
+    font: inherit; /* Match font style of links */
+    cursor: pointer; /* Add pointer cursor for hover effect */
+    text-decoration: none; /* Remove underline */
+    padding: 0; /* Match padding of links */
+}
+
+/* Saved Houses List */
+.saved-houses-list {
+    display: flex; /* Enable flexbox for layout */
+    flex-wrap: wrap; /* Allow tiles to wrap to the next row if needed */
+    gap: 20px; /* Add spacing between tiles */
+    justify-content: center; /* Center tiles horizontally */
+    margin-top: 20px; /* Add spacing above the list */
+}
+
+/* Saved House Row (Individual Tiles) */
+.saved-house-row {
+    display: flex; /* Flexbox for content inside each tile */
+    flex-direction: row; /* Stack content vertically inside each tile */
+    align-items: center; /* Center the content inside */
+    background: #fff; /* White background for the card */
+    border-radius: 8px; /* Rounded corners for tiles */
+    padding: 15px; /* Inner spacing for tile content */
+    transition: transform 0.2s ease; /* Hover effect for smooth scaling */
+}
+
+/* Thumbnail Image */
+.house-thumbnail {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    object-fit: cover; /* Ensure the image fills its container */
+}
+
+/* Price Styling */
+.house-price {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Details Section */
+.house-details {
+    text-align: left; /* Align text to the left for details */
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Hover Effect */
+.saved-house-row:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* Responsive Design for Small Screens */
+@media (max-width: 768px) {
+    .saved-house-row {
+        width: calc(50% - 20px); /* Two tiles per row on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .saved-house-row {
+        width: 100%; /* One tile per row on very small screens */
+    }
+}
+
+
+
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .layout {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .image-section,
+    .form-section {
+        width: 100%;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
