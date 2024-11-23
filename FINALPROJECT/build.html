@@ -31,53 +31,39 @@
                         <p v-text="'$ ' + totalCost.toLocaleString()"></p>
                     </div>
                 </div>
-
                 <form class="form-section">
                     <label for="bedrooms">Number of Bedrooms:</label>
                     <input type="number" id="bedrooms" v-model.number="form.bedrooms" min="1" required>
-
                     <label for="bathrooms">Number of Bathrooms:</label>
                     <input type="number" id="bathrooms" v-model.number="form.bathrooms" min="1" required>
-
                     <label for="floors">Number of Floors:</label>
                     <input type="number" id="floors" v-model.number="form.floors" min="1" max="3" required>
-
                     <label for="squareFootage">Square Footage:</label>
                     <input type="number" id="squareFootage" v-model.number="form.squareFootage" required>
-
                     <label for="wallMaterial">Wall Material:</label>
                     <select id="wallMaterial" v-model="form.wallMaterial" required>
                         <option value="concrete">Concrete</option>
                         <option value="brick">Brick</option>
                         <option value="wood">Wood</option>
                     </select>
-
                     <label for="roofMaterial">Roof Material:</label>
                     <select id="roofMaterial" v-model="form.roofMaterial" required>
                         <option value="asphalt">Asphalt Shingles</option>
                         <option value="metal">Metal</option>
                         <option value="tile">Tile</option>
                     </select>
-
                     <label for="flooringMaterial">Flooring Material:</label>
                     <select id="flooringMaterial" v-model="form.flooringMaterial" required>
                         <option value="hardwood">Hardwood</option>
                         <option value="tile">Tile</option>
                         <option value="carpet">Carpet</option>
                     </select>
-
                     <div>
-    <label>
-        <input type="checkbox" v-model="form.features" value="garage"> Garage
-    </label>
-    <label>
-        <input type="checkbox" v-model="form.features" value="garden"> Garden
-    </label>
-    <label>
-        <input type="checkbox" v-model="form.features" value="pool"> Pool
-    </label>
-</div>
-   <button type="button" @click="saveBuild" class="save-btn" :disabled="isSaving">Save Build</button>
+                        <label><input type="checkbox" v-model="form.features" value="garage"> Garage</label>
+                        <label><input type="checkbox" v-model="form.features" value="garden"> Garden</label>
+                        <label><input type="checkbox" v-model="form.features" value="pool"> Pool</label>
+                    </div>
+                    <button type="button" @click="saveBuild" class="save-btn" :disabled="isSaving">Save Build</button>
                 </form>
             </div>
         </main>
@@ -85,75 +71,58 @@
             <p>&copy; 2024 WYA Construction and Development. All rights reserved.</p>
         </footer>
     </div>
-
     <script>
-            document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const features = urlParams.get('features');
-
             if (features) {
-            // Decode the features array and iterate over it
-            const selectedFeatures = JSON.parse(features);
-            selectedFeatures.forEach(feature => {
-            const checkbox = document.querySelector(`input[name="features"][value="${feature}"]`);
-            if (checkbox) {
-            checkbox.checked = true;
-        }
-        });
-        }
+                const selectedFeatures = JSON.parse(features);
+                selectedFeatures.forEach(feature => {
+                    const checkbox = document.querySelector(`input[name="features"][value="${feature}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
         });
 
-
-    const app = Vue.createApp({
-    data() {
-    return {
-    form: {
-    bedrooms: 1,
-    bathrooms: 1,
-    floors: 1,
-    squareFootage: 1000,
-    wallMaterial: 'brick',
-    roofMaterial: 'asphalt',
-    flooringMaterial: 'hardwood',
-    features: []
-    },
-    images: {
-    1: 'images/house-1-floor.jpg',
-    2: 'images/house-2-floors.jpg',
+        const app = Vue.createApp({
+            data() {
+                return {
+                    form: {
+                        bedrooms: 1,
+                        bathrooms: 1,
+                        floors: 1,
+                        squareFootage: 1000,
+                        wallMaterial: 'brick',
+                        roofMaterial: 'asphalt',
+                        flooringMaterial: 'hardwood',
+                        features: []
+                    },
+                    images: {
+                        1: 'images/house-1-floor.jpg',
+                        2: 'images/house-2-floors.jpg',
                         3: 'images/house-3-floors.jpg'
                     },
-                    user: null, // Current user
-                    isSaving: false // To prevent double submissions
+                    user: null,
+                    isSaving: false
                 };
             },
             computed: {
-                watch: {
-    'form.features': function () {
-        // Trigger re-computation of total cost
-        this.totalCost; // Accessing computed property
-    }
-},
                 houseImage() {
                     return this.images[this.form.floors] || this.images[1];
                 },
                 totalCost() {
                     let costPerSqFt = 150;
-
                     if (this.form.wallMaterial === 'concrete') costPerSqFt *= 2;
                     else if (this.form.wallMaterial === 'brick') costPerSqFt *= 1.5;
-
                     costPerSqFt += this.form.roofMaterial === 'tile' ? 30 : this.form.roofMaterial === 'metal' ? 20 : 10;
                     costPerSqFt += this.form.flooringMaterial === 'hardwood' ? 25 : this.form.flooringMaterial === 'tile' ? 15 : 5;
-
                     let totalCost = this.form.squareFootage * costPerSqFt;
-                    totalCost += this.form.bedrooms * 35000;
-                    totalCost += this.form.bathrooms * 15000;
+                    totalCost += this.form.bedrooms * 35000 + this.form.bathrooms * 15000;
                     if (this.form.floors === 2) totalCost *= 2;
                     if (this.form.floors === 3) totalCost *= 3;
                     if (this.form.features.includes('garage')) totalCost *= 2;
                     if (this.form.features.includes('garden')) totalCost *= 1.3;
                     if (this.form.features.includes('pool')) totalCost *= 1.5;
-
                     return totalCost;
                 }
             },
@@ -169,37 +138,23 @@
                     if (userCookie) {
                         try {
                             this.user = JSON.parse(decodeURIComponent(userCookie));
-                        } catch (error) {
-                            console.error("Error parsing user cookie:", error);
+                        } catch {
                             this.user = null;
                         }
                     }
                 },
                 populateFormFromQuery() {
-    const params = new URLSearchParams(window.location.search);
-
-    this.form.bedrooms = Number(params.get('bedrooms')) || 1;
-    this.form.bathrooms = Number(params.get('bathrooms')) || 1;
-    this.form.floors = Number(params.get('floors')) || 1;
-    this.form.squareFootage = Number(params.get('squareFootage')) || 1000;
-    this.form.wallMaterial = params.get('wallMaterial') || 'brick';
-    this.form.roofMaterial = params.get('roofMaterial') || 'asphalt';
-    this.form.flooringMaterial = params.get('flooringMaterial') || 'hardwood';
-
-    // Parse and set features array
-    const featuresParam = params.get('features');
-    if (featuresParam) {
-        try {
-            this.form.features = JSON.parse(featuresParam);
-        } catch (error) {
-            console.error("Error parsing features parameter:", error);
-            this.form.features = [];
-        }
-    } else {
-        this.form.features = [];
-    }
-},
-
+                    const params = new URLSearchParams(window.location.search);
+                    this.form.bedrooms = Number(params.get('bedrooms')) || 1;
+                    this.form.bathrooms = Number(params.get('bathrooms')) || 1;
+                    this.form.floors = Number(params.get('floors')) || 1;
+                    this.form.squareFootage = Number(params.get('squareFootage')) || 1000;
+                    this.form.wallMaterial = params.get('wallMaterial') || 'brick';
+                    this.form.roofMaterial = params.get('roofMaterial') || 'asphalt';
+                    this.form.flooringMaterial = params.get('flooringMaterial') || 'hardwood';
+                    const featuresParam = params.get('features');
+                    this.form.features = featuresParam ? JSON.parse(featuresParam) : [];
+                },
                 signOut() {
                     document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
                     this.user = null;
@@ -211,7 +166,6 @@
                         alert("You need to sign in to save your build.");
                         return;
                     }
-
                     const buildData = {
                         user_id: this.user.id,
                         bedrooms: this.form.bedrooms,
@@ -224,29 +178,22 @@
                         features: this.form.features,
                         total_cost: this.totalCost
                     };
-
                     try {
                         const res = await fetch('save_build.php', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(buildData)
                         });
-
                         const data = await res.json();
-                        if (data.success) {
-                            alert('Build saved successfully!');
-                        } else {
-                            alert(`Failed to save build: ${data.message}`);
-                        }
-                    } catch (error) {
-                        console.error('Error saving build:', error);
+                        alert(data.success ? 'Build saved successfully!' : `Failed to save build: ${data.message}`);
+                    } catch {
                         alert('An error occurred while saving your build.');
                     }
                 }
             },
             mounted() {
                 this.checkUser();
-                this.populateFormFromQuery(); // Populate form with query parameters
+                this.populateFormFromQuery();
             }
         });
 

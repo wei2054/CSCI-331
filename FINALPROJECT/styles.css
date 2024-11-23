@@ -11,7 +11,7 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: #f4f4f4; /* Neutral background color */
+    background-color: #f4f4f4;
 }
 
 /* Header */
@@ -68,6 +68,15 @@ nav ul li a:hover {
     color: #333;
 }
 
+nav ul li .sign-out-btn {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+}
+
 /* Background Image */
 .background-image {
     background-size: cover;
@@ -77,8 +86,7 @@ nav ul li a:hover {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding: 100px 30px 30px; /* Top padding ensures content stays below the nav bar */
-
+    padding: 100px 30px 30px;
 }
 
 /* Layout */
@@ -170,115 +178,55 @@ fieldset {
 
 /* Footer */
 footer {
-    background-color: #000; /* Black background */
-    color: #fff; /* White text */
+    background-color: #000;
+    color: #fff;
     text-align: center;
     padding: 10px 0;
-    margin-top: auto; /* Pushes the footer to the bottom if content is short */
-    font-size: 0.9rem; /* Slightly smaller text for footer */
-    font-family: Arial, sans-serif; /* Consistent font style */
+    margin-top: auto;
+    font-size: 0.9rem;
 }
 
+/* Saved Houses List */
 .saved-houses-list {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.saved-house-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    transition: transform 0.2s ease;
+}
+
+.saved-house-row:hover {
+    transform: scale(1.05);
+}
+
+.house-thumbnail {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    object-fit: cover;
 }
 
 .house-price {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #35424a;
-}
-.sign-out-btn {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    font-size: 1em;
-    padding: 10px;
-}
-
-.sign-out-btn:hover {
-    text-decoration: underline;
-}
-
-/* Add this to your styles.css file */
-nav ul li .sign-out-btn {
-    background: none; /* Remove default button background */
-    border: none; /* Remove border */
-    color: inherit; /* Match text color of links */
-    font: inherit; /* Match font style of links */
-    cursor: pointer; /* Add pointer cursor for hover effect */
-    text-decoration: none; /* Remove underline */
-    padding: 0; /* Match padding of links */
-}
-
-/* Saved Houses List */
-.saved-houses-list {
-    display: flex; /* Enable flexbox for layout */
-    flex-wrap: wrap; /* Allow tiles to wrap to the next row if needed */
-    gap: 20px; /* Add spacing between tiles */
-    justify-content: center; /* Center tiles horizontally */
-    margin-top: 20px; /* Add spacing above the list */
-}
-
-/* Saved House Row (Individual Tiles) */
-.saved-house-row {
-    display: flex; /* Flexbox for content inside each tile */
-    flex-direction: row; /* Stack content vertically inside each tile */
-    align-items: center; /* Center the content inside */
-    background: #fff; /* White background for the card */
-    border-radius: 8px; /* Rounded corners for tiles */
-    padding: 15px; /* Inner spacing for tile content */
-    transition: transform 0.2s ease; /* Hover effect for smooth scaling */
-}
-
-/* Thumbnail Image */
-.house-thumbnail {
-    width: 100%;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    object-fit: cover; /* Ensure the image fills its container */
-}
-
-/* Price Styling */
-.house-price {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 15px;
     text-align: center;
 }
 
-/* Details Section */
 .house-details {
-    text-align: left; /* Align text to the left for details */
+    text-align: left;
     font-size: 14px;
     line-height: 1.6;
 }
-
-/* Hover Effect */
-.saved-house-row:hover {
-    transform: scale(1.05); /* Slight zoom on hover */
-}
-
-/* Responsive Design for Small Screens */
-@media (max-width: 768px) {
-    .saved-house-row {
-        width: calc(50% - 20px); /* Two tiles per row on smaller screens */
-    }
-}
-
-@media (max-width: 480px) {
-    .saved-house-row {
-        width: 100%; /* One tile per row on very small screens */
-    }
-}
-
-
-
-
-
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -295,5 +243,15 @@ nav ul li .sign-out-btn {
     nav ul {
         flex-direction: column;
         gap: 10px;
+    }
+
+    .saved-house-row {
+        width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .saved-house-row {
+        width: 100%;
     }
 }

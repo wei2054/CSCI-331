@@ -24,65 +24,52 @@
             </nav>
         </header>
         <main class="background-image" style="background-image: url('images/background-contact.jpg'); background-size: cover; background-position: center; padding: 40px;">
-    <div class="content-tile" style="background-color: rgba(0, 34, 68, 0.9); color: #ffffff; padding: 20px; border-radius: 10px; max-width: 80%; margin: 20px auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
-        <h2 style="color: #ffffff; font-size: 2em; margin-bottom: 10px; text-align: center;">Contact Us</h2>
-        <p style="color: #d1e7ff; font-size: 1.2em; line-height: 1.5; text-align: center; margin-bottom: 20px;">
-            Have questions or want to start your project? Get in touch with us using the form below:
-        </p>
-        <!-- Google Form Embed -->
-        <iframe
-            src="https://docs.google.com/forms/d/e/1FAIpQLSczLh4-Zds88KZ3TX3HIUAL7x_eb1kEJT_MP7EU0bwLpZC6jA/viewform?embedded=true"
-            width="100%"
-            height="600"
-            style="background-color: #ffffff; border: none; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);"
-            frameborder="0"
-            marginheight="0"
-            marginwidth="0"
-        >Loading…</iframe>
-    </div>
-</main>
-
+            <div class="content-tile" style="background-color: rgba(0, 34, 68, 0.9); color: #ffffff; padding: 20px; border-radius: 10px; max-width: 80%; margin: 20px auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                <h2 style="color: #ffffff; font-size: 2em; margin-bottom: 10px; text-align: center;">Contact Us</h2>
+                <p style="color: #d1e7ff; font-size: 1.2em; line-height: 1.5; text-align: center; margin-bottom: 20px;">
+                    Have questions or want to start your project? Get in touch with us using the form below:
+                </p>
+                <iframe
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSczLh4-Zds88KZ3TX3HIUAL7x_eb1kEJT_MP7EU0bwLpZC6jA/viewform?embedded=true"
+                    width="100%"
+                    height="600"
+                    style="background-color: #ffffff; border: none; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);"
+                    frameborder="0"
+                    marginheight="0"
+                    marginwidth="0"
+                >Loading…</iframe>
+            </div>
+        </main>
         <footer>
             <p>&copy; 2024 WYA Construction and Development. All rights reserved.</p>
         </footer>
     </div>
-
-    <!-- Vue.js Script -->
     <script>
         const app = Vue.createApp({
             data() {
-                return {
-                    user: null // Holds user data if logged in, null otherwise
-                };
+                return { user: null };
             },
             methods: {
                 getCookie(name) {
-                    // Helper function to retrieve a cookie by name
                     const value = `; ${document.cookie}`;
                     const parts = value.split(`; ${name}=`);
                     if (parts.length === 2) return parts.pop().split(';').shift();
                 },
                 fetchUser() {
-                    // Check if a user is logged in by accessing cookies
                     const userCookie = this.getCookie('user');
-                    if (userCookie) {
-                        this.user = userCookie; // Set user if cookie exists
-                    }
+                    if (userCookie) this.user = userCookie;
                 },
                 signOut() {
-                    // Clear the user cookie
                     document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
                     this.user = null;
                     alert('You have been signed out.');
-                    // Redirect to the sign-in page
                     window.location.href = 'sign-in.html';
                 }
             },
             mounted() {
-                this.fetchUser(); // Check for logged-in user when the page loads
+                this.fetchUser();
             }
         });
-
         app.mount('#app');
     </script>
 </body>

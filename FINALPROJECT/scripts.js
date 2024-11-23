@@ -15,7 +15,9 @@ const app = Vue.createApp({
                 1: 'images/house-1-floor.jpg',
                 2: 'images/house-2-floors.jpg',
                 3: 'images/house-3-floors.jpg'
-            }
+            },
+            user: null,
+            savedHouses: []
         };
     },
     computed: {
@@ -24,61 +26,29 @@ const app = Vue.createApp({
         },
         totalCost() {
             const { bedrooms, bathrooms, floors, squareFootage, wallMaterial, roofMaterial, flooringMaterial, features } = this.form;
-
-            // Base cost per square foot
             let costPerSqFt = 150;
 
-            // Adjust cost per square foot based on wall material
-            if (wallMaterial === 'concrete') {
-                costPerSqFt *= 2; // Concrete is 2x the base price
-            } else if (wallMaterial === 'brick') {
-                costPerSqFt *= 1.5; // Brick is 1.5x the base price
-            } else if (wallMaterial === 'wood') {
-                costPerSqFt *= 1; // Wood is the base price
-            }
+            if (wallMaterial === 'concrete') costPerSqFt *= 2;
+            else if (wallMaterial === 'brick') costPerSqFt *= 1.5;
 
-            // Adjust for roof material
             costPerSqFt += roofMaterial === 'tile' ? 30 : roofMaterial === 'metal' ? 20 : 10;
-
-            // Adjust for flooring material
             costPerSqFt += flooringMaterial === 'hardwood' ? 25 : flooringMaterial === 'tile' ? 15 : 5;
 
             let totalCost = squareFootage * costPerSqFt;
+            totalCost += bedrooms * 35000 + bathrooms * 15000;
 
-            // Add costs for bedrooms, bathrooms, and other basic features
-            totalCost += bedrooms * 35000;
-            totalCost += bathrooms * 15000;
-
-            // Adjust for number of floors
-            if (floors === 2) totalCost *= 2; // Double cost for 2nd floor
-            if (floors === 3) totalCost *= 3; // Triple cost for 3rd floor
-
-            // Adjust for additional features
-            if (features.includes('garage')) totalCost *= 2; // Double cost for garage
-            if (features.includes('garden')) totalCost *= 1.3; // Increase cost by 1.3x for garden
-            if (features.includes('pool')) totalCost *= 1.5; // Increase cost by 1.5x for pool
+            if (floors === 2) totalCost *= 2;
+            if (floors === 3) totalCost *= 3;
+            if (features.includes('garage')) totalCost *= 2;
+            if (features.includes('garden')) totalCost *= 1.3;
+            if (features.includes('pool')) totalCost *= 1.5;
 
             return totalCost;
         }
-    }
-});
-
-app.mount('#app');
-
-const app = Vue.createApp({
-    data() {
-        return {
-            user: null,
-            savedHouses: []
-        };
     },
     methods: {
         async onSignIn(response) {
-            // Get user info from Google
-            const userInfo = response.credential;
-            const payload = JSON.parse(atob(userInfo.split('.')[1]));
-
-            // Save user to backend
+            const payload = JSON.parse(atob(response.credential.split('.')[1]));
             const res = await fetch('/api/auth/google-signin.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -91,33 +61,32 @@ const app = Vue.createApp({
             }
         },
         async saveBuild() {
-            const buildData = {
-                ...this.form,
-                total_cost: this.totalCost
-            };
-
+            const buildData = { ...this.form, total_cost: this.totalCost };
             const res = await fetch('/api/build/save.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user_id: this.user.id, ...buildData })
             });
 
-            if (res.ok) {
-                alert('Build saved successfully!');
-            }
+            if (res.ok) alert('Build saved successfully!');
         },
         async fetchSavedHouses() {
             const res = await fetch(`/api/build/fetch.php?user_id=${this.user.id}`);
             const data = await res.json();
 
             if (data.success) {
-                this.savedHouses = data.houses;
+                this.savedHouses = data.houses.map(house => ({
+                    ...house,
+                    image: house.image || `images/house-${house.floors}-floors.jpg`
+                }));
             }
+        }
+    },
+    mounted() {
+        if (this.user) {
+            this.fetchSavedHouses();
         }
     }
 });
 
 app.mount('#app');
-
-
-

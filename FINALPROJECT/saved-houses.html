@@ -26,63 +26,50 @@
         <main class="background-image" style="background-image: url('images/background-saved.jpg');">
             <div class="content">
                 <h2>Saved Houses</h2>
-                <!-- If no saved houses are found -->
                 <div v-if="!savedHouses.length" class="no-saved-houses">
                     <p>No saved houses yet. Use the <a href="build.html">Build Your House Tool</a> to create and save your designs!</p>
                 </div>
-                <!-- List of saved houses -->
                 <div v-else class="saved-houses-list">
-    <div
-        class="saved-house-row"
-        v-for="house in savedHouses"
-        :key="house.id"
-        @click="loadBuild(house)"
-    >
-        <img :src="house.image" alt="House Image" class="house-thumbnail">
-        <div class="house-price">
-            <p><strong>Price:</strong> $ {{ house.total_cost ? house.total_cost.toLocaleString() : 'N/A' }}</p>
-        </div>
-        <div class="house-details">
-            <p><strong>Bedrooms:</strong> {{ house.bedrooms }}</p>
-            <p><strong>Bathrooms:</strong> {{ house.bathrooms }}</p>
-            <p><strong>Floors:</strong> {{ house.floors }}</p>
-            <p><strong>Square Footage:</strong> {{ house.square_footage }} sq ft</p>
-            <p><strong>Wall Material:</strong> {{ house.wall_material }}</p>
-            <p><strong>Roof Material:</strong> {{ house.roof_material }}</p>
-            <p><strong>Flooring Material:</strong> {{ house.flooring_material }}</p>
-        </div>
-    </div>
-</div>
-
+                    <div class="saved-house-row" v-for="house in savedHouses" :key="house.id" @click="loadBuild(house)">
+                        <img :src="house.image" alt="House Image" class="house-thumbnail">
+                        <div class="house-price">
+                            <p><strong>Price:</strong> $ {{ house.total_cost ? house.total_cost.toLocaleString() : 'N/A' }}</p>
+                        </div>
+                        <div class="house-details">
+                            <p><strong>Bedrooms:</strong> {{ house.bedrooms }}</p>
+                            <p><strong>Bathrooms:</strong> {{ house.bathrooms }}</p>
+                            <p><strong>Floors:</strong> {{ house.floors }}</p>
+                            <p><strong>Square Footage:</strong> {{ house.square_footage }} sq ft</p>
+                            <p><strong>Wall Material:</strong> {{ house.wall_material }}</p>
+                            <p><strong>Roof Material:</strong> {{ house.roof_material }}</p>
+                            <p><strong>Flooring Material:</strong> {{ house.flooring_material }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
         <footer>
             <p>&copy; 2024 WYA Construction and Development. All rights reserved.</p>
         </footer>
     </div>
-
-    <!-- Vue.js Script -->
     <script>
         const app = Vue.createApp({
             data() {
                 return {
-                    user: null, // Current user
-                    savedHouses: [] // List of saved houses
+                    user: null,
+                    savedHouses: []
                 };
             },
             methods: {
                 async fetchSavedHouses() {
                     if (!this.user) return;
-
                     try {
-                        // Fetch saved houses from backend API
                         const res = await fetch(`fetch_saved_houses.php?user_id=${this.user.id}`);
                         const data = await res.json();
-
                         if (data.success) {
                             this.savedHouses = data.houses.map(house => ({
                                 ...house,
-                                image: house.image || `images/house-${house.floors}-floors.jpg` // Default image based on floors
+                                image: house.image || `images/house-${house.floors}-floors.jpg`
                             }));
                         } else {
                             alert('Failed to fetch saved houses.');
@@ -93,51 +80,41 @@
                     }
                 },
                 loadBuild(house) {
-    // Construct query parameters based on house data, including features
-    const queryParams = new URLSearchParams({
-        bedrooms: house.bedrooms,
-        bathrooms: house.bathrooms,
-        floors: house.floors,
-        squareFootage: house.square_footage,
-        wallMaterial: house.wall_material,
-        roofMaterial: house.roof_material,
-        flooringMaterial: house.flooring_material,
-        features: house.features.join(','), // Join features as a comma-separated string
-    }).toString();
-
-    // Redirect to build.html with query parameters
-    window.location.href = `build.html?${queryParams}`;
-},
-
+                    const queryParams = new URLSearchParams({
+                        bedrooms: house.bedrooms,
+                        bathrooms: house.bathrooms,
+                        floors: house.floors,
+                        squareFootage: house.square_footage,
+                        wallMaterial: house.wall_material,
+                        roofMaterial: house.roof_material,
+                        flooringMaterial: house.flooring_material,
+                        features: house.features.join(',')
+                    }).toString();
+                    window.location.href = `build.html?${queryParams}`;
+                },
                 getCookie(name) {
                     const value = `; ${document.cookie}`;
                     const parts = value.split(`; ${name}=`);
                     if (parts.length === 2) return parts.pop().split(';').shift();
                 },
                 fetchUser() {
-                    // Fetch user data from cookies
                     const userCookie = this.getCookie('user');
                     if (userCookie) {
                         this.user = JSON.parse(decodeURIComponent(userCookie));
                     }
                 },
                 signOut() {
-                    // Clear the user cookie
                     document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
                     this.user = null;
                     alert('You have been signed out.');
-                    // Redirect to the sign-in page
                     window.location.href = 'sign-in.html';
                 }
             },
             mounted() {
-                this.fetchUser(); // Check if the user is signed in
-                if (this.user) {
-                    this.fetchSavedHouses();
-                }
+                this.fetchUser();
+                if (this.user) this.fetchSavedHouses();
             }
         });
-
         app.mount('#app');
     </script>
 </body>

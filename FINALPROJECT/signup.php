@@ -1,39 +1,29 @@
 <?php
 header("Content-Type: application/json");
-file_put_contents('signup_debug.log', date('Y-m-d H:i:s') . " - Input: " . file_get_contents('php://input') . "\n", FILE_APPEND);
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
+file_put_contents('signup_debug.log', date('Y-m-d H:i:s') . " - Input: " . file_get_contents('php://input') . "\n", FILE_APPEND);
+
 try {
-    // Database connection
-    $servername = "localhost";
-    $username = "user48";
-    $password = "48kivu";
-    $dbname = "db48";
-
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Check connection
+    $conn = new mysqli("localhost", "user48", "48kivu", "db48");
     if ($conn->connect_error) {
         throw new Exception("Connection failed: " . $conn->connect_error);
     }
 
-    // Get POST data
     $input = json_decode(file_get_contents('php://input'), true);
-    $name = $input['name'];
-    $email = $input['email'];
-    $password = $input['password'];
+    $name = $input['name'] ?? '';
+    $email = $input['email'] ?? '';
+    $password = $input['password'] ?? '';
 
     // Validate input
     if (empty($name) || empty($email) || empty($password)) {
         throw new Exception("All fields are required.");
     }
-
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         throw new Exception("Invalid email format.");
     }
-
     if (strlen($password) < 8) {
         throw new Exception("Password must be at least 8 characters long.");
     }
@@ -51,7 +41,7 @@ try {
     // Hash the password
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-    // Insert user into database
+    // Insert user into the database
     $stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
     if (!$stmt) {
         throw new Exception("Prepare statement failed.");
@@ -59,7 +49,7 @@ try {
     $stmt->bind_param("sss", $name, $email, $hashedPassword);
 
     if (!$stmt->execute()) {
-        throw new Exception("Execute failed: " . $stmt->error);
+        throw new Exception("Failed to create account: " . $stmt->error);
     }
 
     echo json_encode(["success" => true]);

@@ -12,7 +12,7 @@
         <header>
             <h1>Sign Up for WYA Construction</h1>
         </header>
-        <main class="background-image" style="">
+        <main class="background-image" style="background-image: url('images/background-signup.jpg');">
             <div class="content">
                 <h2>Create a New Account</h2>
                 <form @submit.prevent="signUp">
@@ -40,11 +40,11 @@
         const app = Vue.createApp({
             data() {
                 return {
-                    name: '', // Name input
-                    email: '', // Email input
-                    password: '', // Password input
-                    errorMessage: '', // Error message if sign-up fails
-                    successMessage: '' // Success message if sign-up succeeds
+                    name: '',
+                    email: '',
+                    password: '',
+                    errorMessage: '',
+                    successMessage: ''
                 };
             },
             methods: {
@@ -64,6 +64,9 @@
                         if (data.success) {
                             this.successMessage = 'Account created successfully! You can now sign in.';
                             this.errorMessage = '';
+                            this.name = '';
+                            this.email = '';
+                            this.password = '';
                         } else {
                             this.errorMessage = data.message || 'Sign up failed. Please try again.';
                             this.successMessage = '';

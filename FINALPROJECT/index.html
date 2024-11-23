@@ -24,25 +24,21 @@
             </nav>
         </header>
         <main class="background-image" style="background-image: url('images/background-home.jpg'); background-size: cover; background-position: center; padding: 40px;">
-    <div class="content-tile" style="background-color: rgba(0, 34, 68, 0.8); color: #ffffff; padding: 15px; border-radius: 10px; max-width: 70%; margin: 20px auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
-        <h2 style="color: #ffffff; font-size: 2.5em; margin-bottom: 10px; text-align: center;">Welcome to WYA Construction and Development</h2>
-        <p style="color: #d1e7ff; font-size: 1.5em; line-height: 1.5; text-align: center;">
-            Your dream home, built with precision and passion.
-        </p>
-    </div>
-</main>
-
+            <div class="content-tile" style="background-color: rgba(0, 34, 68, 0.8); color: #ffffff; padding: 15px; border-radius: 10px; max-width: 70%; margin: 20px auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                <h2 style="color: #ffffff; font-size: 2.5em; margin-bottom: 10px; text-align: center;">Welcome to WYA Construction and Development</h2>
+                <p style="color: #d1e7ff; font-size: 1.5em; line-height: 1.5; text-align: center;">
+                    Your dream home, built with precision and passion.
+                </p>
+            </div>
+        </main>
         <footer>
             <p>&copy; 2024 WYA Construction and Development. All rights reserved.</p>
         </footer>
     </div>
-
     <script>
         const app = Vue.createApp({
             data() {
-                return {
-                    user: null // Current user
-                };
+                return { user: null };
             },
             methods: {
                 getCookie(name) {
@@ -51,28 +47,24 @@
                     if (parts.length === 2) return parts.pop().split(';').shift();
                 },
                 checkUser() {
-                    // Check for existing user cookie
                     const userCookie = this.getCookie('user');
                     if (userCookie) {
                         try {
                             this.user = JSON.parse(decodeURIComponent(userCookie));
-                        } catch (error) {
-                            console.error("Error parsing user cookie:", error);
+                        } catch {
                             this.user = null;
                         }
                     }
                 },
                 signOut() {
-                    // Clear the user cookie
                     document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
                     this.user = null;
                     alert('You have been signed out.');
-                    // Redirect to the sign-in page
                     window.location.href = 'sign-in.html';
                 }
             },
             mounted() {
-                this.checkUser(); // Check if the user is already signed in
+                this.checkUser();
             }
         });
 
