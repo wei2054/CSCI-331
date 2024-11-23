@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Houses - WYA Construction</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>WYA Construction and Development</h1>
+            <nav>
+                <span class="business-name">WYA Construction and Development</span>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="build.html">Build Your House</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li v-if="!user"><a href="sign-in.html">Sign In</a></li>
+                    <li v-else><a href="saved-houses.html">Saved Houses</a></li>
+                    <li v-if="user"><button @click="signOut" class="sign-out-btn">Sign Out</button></li>
+                </ul>
+            </nav>
+        </header>
+        <main class="background-image" style="background-image: url('images/background-saved.jpg');">
+            <div class="content">
+                <h2>Saved Houses</h2>
+                <div v-if="!savedHouses.length" class="no-saved-houses">
+                    <p>No saved houses yet. Use the <a href="build.html">Build Your House Tool</a> to create and save your designs!</p>
+                </div>
+                <div v-else class="saved-houses-list">
+                    <div class="saved-house-row" v-for="house in savedHouses" :key="house.id" @click="loadBuild(house)">
+                        <img :src="house.image" alt="House Image" class="house-thumbnail">
+                        <div class="house-price">
+                            <p><strong>Price:</strong> $ {{ house.total_cost ? house.total_cost.toLocaleString() : 'N/A' }}</p>
+                        </div>
+                        <div class="house-details">
+                            <p><strong>Bedrooms:</strong> {{ house.bedrooms }}</p>
+                            <p><strong>Bathrooms:</strong> {{ house.bathrooms }}</p>
+                            <p><strong>Floors:</strong> {{ house.floors }}</p>
+                            <p><strong>Square Footage:</strong> {{ house.square_footage }} sq ft</p>
+                            <p><strong>Wall Material:</strong> {{ house.wall_material }}</p>
+                            <p><strong>Roof Material:</strong> {{ house.roof_material }}</p>
+                            <p><strong>Flooring Material:</strong> {{ house.flooring_material }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2024 WYA Construction and Development. All rights reserved.</p>
+        </footer>
+    </div>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    user: null,
+                    savedHouses: []
+                };
+            },
+            methods: {
+                async fetchSavedHouses() {
+                    if (!this.user) return;
+                    try {
+                        const res = await fetch(`fetch_saved_houses.php?user_id=${this.user.id}`);
+                        const data = await res.json();
+                        if (data.success) {
+                            this.savedHouses = data.houses.map(house => ({
+                                ...house,
+                                image: house.image || `images/house-${house.floors}-floors.jpg`
+                            }));
+                        } else {
+                            alert('Failed to fetch saved houses.');
+                        }
+                    } catch (error) {
+                        console.error('Error fetching saved houses:', error);
+                        alert('An error occurred while fetching saved houses.');
+                    }
+                },
+                loadBuild(house) {
+                    const queryParams = new URLSearchParams({
+                        bedrooms: house.bedrooms,
+                        bathrooms: house.bathrooms,
+                        floors: house.floors,
+                        squareFootage: house.square_footage,
+                        wallMaterial: house.wall_material,
+                        roofMaterial: house.roof_material,
+                        flooringMaterial: house.flooring_material,
+                        features: house.features.join(',')
+                    }).toString();
+                    window.location.href = `build.html?${queryParams}`;
+                },
+                getCookie(name) {
+                    const value = `; ${document.cookie}`;
+                    const parts = value.split(`; ${name}=`);
+                    if (parts.length === 2) return parts.pop().split(';').shift();
+                },
+                fetchUser() {
+                    const userCookie = this.getCookie('user');
+                    if (userCookie) {
+                        this.user = JSON.parse(decodeURIComponent(userCookie));
+                    }
+                },
+                signOut() {
+                    document.cookie = "user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+                    this.user = null;
+                    alert('You have been signed out.');
+                    window.location.href = 'sign-in.html';
+                }
+            },
+            mounted() {
+                this.fetchUser();
+                if (this.user) this.fetchSavedHouses();
+            }
+        });
+        app.mount('#app');
+    </script>
+</body>
+</html>
