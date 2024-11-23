@@ -62,11 +62,15 @@
 
                         const data = await res.json();
                         if (data.success) {
-                            this.successMessage = 'Account created successfully! You can now sign in.';
+                            this.successMessage = 'Account created successfully! You are being redirected to the sign-in page!';
                             this.errorMessage = '';
                             this.name = '';
                             this.email = '';
                             this.password = '';
+
+                            setTimeout(() => {
+                                window.location.href = 'sign-in.html';
+                                }, 10000); // 2-second delay
                         } else {
                             this.errorMessage = data.message || 'Sign up failed. Please try again.';
                             this.successMessage = '';
